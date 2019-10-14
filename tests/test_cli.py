@@ -8,7 +8,7 @@ from redash.query_runner import query_runners
 from redash.cli import manager
 from redash.models import DataSource, Group, Organization, User, db
 
-
+# this is a test
 class DataSourceCommandTests(BaseTestCase):
     def test_interactive_new(self):
         runner = CliRunner()
