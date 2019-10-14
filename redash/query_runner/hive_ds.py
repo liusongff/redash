@@ -3,7 +3,7 @@ import sys
 import base64
 
 from redash.query_runner import *
-from redash.utils import json_dumps
+from redash.utils import json_dumps, json_loads
 
 logger = logging.getLogger(__name__)
 
@@ -182,6 +182,56 @@ class Hive(BaseSQLQueryRunner):
         )
 
         return connection
+
+    #for hive meta 
+    def _mysql_run(self, query, user):
+        import MySQLdb
+        connection = None
+        try:
+            connection = MySQLdb.connect(host=self.configuration.get('mysql_host', ''),
+                                         user=self.configuration.get('mysql_username', ''),
+                                         passwd=self.configuration.get('passwd', ''),
+                                         db=self.configuration['mysql_database'],
+                                         port=self.configuration.get('mysql_port', 3306),
+                                         charset='utf8', use_unicode=True,
+                                         connect_timeout=60)
+            cursor = connection.cursor()
+            logger.debug("MySQL running query: %s", query)
+            cursor.execute(query)
+
+            data = cursor.fetchall()
+
+            while cursor.nextset():
+                data = cursor.fetchall()
+
+            # TODO - very similar to pg.py
+            if cursor.description is not None:
+                columns = self.fetch_columns([(i[0], types_map.get(i[1], None)) for i in cursor.description])
+                print "##################################################"
+                print columns
+                rows = [dict(zip((c['name'] for c in columns), row)) for row in data]
+                data = {'columns': columns, 'rows': rows}
+                print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+                print data
+                json_data = json_dumps(data)
+                error = None
+            else:
+                json_data = None
+                error = "No data was returned."
+
+            cursor.close()
+        except MySQLdb.Error as e:
+            json_data = None
+            error = e.args[1]
+        except KeyboardInterrupt:
+            cursor.close()
+            error = "Query cancelled by user."
+            json_data = None
+        finally:
+            if connection:
+                connection.close()
+
+        return json_data, error
 
     def run_query(self, query, user):
         connection = None

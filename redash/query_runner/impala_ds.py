@@ -1,7 +1,7 @@
 import logging
 
 from redash.query_runner import *
-from redash.utils import json_dumps
+from redash.utils import json_dumps, json_loads
 
 logger = logging.getLogger(__name__)
 
@@ -239,12 +239,16 @@ class Impala(BaseSQLQueryRunner):
 
         connection = None
         try:
-            connection = connect(**self.configuration.to_dict())
-
+            # connection = connect(**self.configuration.to_dict())
+            impala_host = self.configuration["host"]     
+            impala_port = self.configuration["port"]     
+            impala_user = self.configuration["user"]     
+            impala_password = self.configuration["password"]
+            impala_db = self.configuration["database"]
+            impala_timeout = self.configuration["timeout"]
+            connection = connect(host=impala_host, port=impala_port, auth_mechanism='PLAIN',user=impala_user,password=impala_password, database=impala_db,timeout=impala_timeout)
             cursor = connection.cursor()
-
             cursor.execute(query)
-
             column_names = []
             columns = []
 
