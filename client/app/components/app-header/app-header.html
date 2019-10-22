@@ -25,7 +25,7 @@
           ng-show="$ctrl.showDashboardsMenu"
           uib-dropdown
         >
-          <a class="btn" href="dashboards">Dashboards</a>
+          <a class="btn" href="dashboards">看板列表</a>
           <a type="button" class="btn hidden-xs" uib-dropdown-toggle>
             <span class="caret caret--nav"></span>
           </a>
@@ -52,7 +52,7 @@
           ng-show="$ctrl.showQueriesMenu"
           uib-dropdown
         >
-          <a class="btn" href="queries">Queries</a>
+          <a class="btn" href="queries">查询列表</a>
           <a type="button" class="btn hidden-xs" uib-dropdown-toggle>
             <span class="caret caret--nav"></span>
           </a>
@@ -75,7 +75,7 @@
           </ul>
         </li>
         <li ng-if="$ctrl.showAlertsLink">
-          <a href="alerts">Alerts</a>
+          <a href="alerts">数据监控</a>
         </li>
       </ul>
 
@@ -93,7 +93,7 @@
           uib-dropdown-toggle
           ng-disabled="disabled"
         >
-          Create <span class="caret caret--nav"></span>
+          新建 <span class="caret caret--nav"></span>
         </button>
         <ul
           class="dropdown-menu"
@@ -102,16 +102,16 @@
           aria-labelledby="create-button"
         >
           <li role="menuitem" ng-show="$ctrl.showNewQueryMenu">
-            <a href="queries/new">Query</a>
+            <a href="queries/new">查询</a>
           </li>
           <li role="menuitem">
             <a
               ng-show="$ctrl.currentUser.hasPermission('create_dashboard')"
               ng-click="$ctrl.newDashboard()"
-              >Dashboard</a
+              >看板</a
             >
           </li>
-          <li role="menuitem"><a href="alerts/new">Alert</a></li>
+          <li role="menuitem"><a href="alerts/new">数据监控</a></li>
         </ul>
       </div>
 
@@ -150,7 +150,7 @@
           ></a>
           <ul class="dropdown-menu dropdown-menu--profile">
             <li>
-              <a ng-href="users/me">Edit Profile</a>
+              <a ng-href="users/me">修改信息</a>
             </li>
             <li
               class="divider"
@@ -158,19 +158,19 @@
             ></li>
 
             <li ng-show="$ctrl.currentUser.isAdmin">
-              <a href="data_sources" title="Data Sources">Data Sources</a>
+              <a href="data_sources" title="Data Sources">数据连接</a>
             </li>
             <li ng-show="$ctrl.showSettingsMenu">
-              <a href="groups" title="Settings">Groups</a>
+              <a href="groups" title="Settings">组</a>
             </li>
             <li ng-show="$ctrl.showSettingsMenu">
-              <a href="users" title="Settings">Users</a>
+              <a href="users" title="Settings">用户</a>
             </li>
             <li>
               <a ng-href="query_snippets">Query Snippets</a>
             </li>
             <li ng-show="$ctrl.showSettingsMenu">
-              <a href="destinations" title="Settings">Alert Destinations</a>
+              <a href="destinations" title="Settings">发送警告</a>
             </li>
 
             <li
@@ -179,13 +179,13 @@
             ></li>
 
             <li ng-if="$ctrl.currentUser.hasPermission('super_admin')">
-              <a href="admin/status">System Status</a>
+              <a href="admin/status">系统状态</a>
             </li>
 
             <li class="divider"></li>
 
             <li>
-              <a ng-click="$ctrl.logout()">Log out</a>
+              <a ng-click="$ctrl.logout()">退出</a>
             </li>
 
             <li class="divider"></li>

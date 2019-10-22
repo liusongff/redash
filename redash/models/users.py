@@ -23,6 +23,8 @@ from .base import db, Column, GFKBase
 from .mixins import TimestampMixin, BelongsToOrgMixin
 from .types import json_cast_property, MutableDict, MutableList
 
+from suds.client import Client
+
 logger = logging.getLogger(__name__)
 
 LAST_ACTIVE_KEY = 'users:last_active_at'
@@ -224,13 +226,14 @@ class User(TimestampMixin, db.Model, BelongsToOrgMixin, UserMixin, PermissionsCh
 
     def verify_password_glodon(self, name, password):
         #####调用接口认证#######
-        if name == "renxr" and password == "123456":
-            result = True
-        elif name == "lius-f":
-            result = True
+        url = "a"
+        headers = {'Content-Type': 'text/xml;charset=UTF-8;charset="UTF-8"'}
+        client = Client(url, headers=headers, faults=False, timeout=15)
+        result = client.service.process(name, password)[1]
+        if(result=='Y'):
+            return True
         else:
-            result = False
-        return result
+            return False
 
     def update_group_assignments(self, group_names):
         groups = Group.find_by_name(self.org, group_names)
