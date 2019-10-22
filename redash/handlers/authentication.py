@@ -194,7 +194,8 @@ def login(org_slug=None):
                            show_password_login=current_org.get_setting('auth_password_login_enabled'),
                            show_saml_login=current_org.get_setting('auth_saml_enabled'),
                            show_remote_user_login=settings.REMOTE_USER_LOGIN_ENABLED,
-                           show_ldap_login=settings.LDAP_LOGIN_ENABLED)
+                           show_ldap_login=settings.LDAP_LOGIN_ENABLED,
+                           hide_forgot_password=True)
 
 
 @routes.route(org_scoped_rule('/logout'))
