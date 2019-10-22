@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import logging
 
 from flask import abort, flash, redirect, render_template, request, url_for
@@ -156,17 +157,31 @@ def login(org_slug=None):
         return redirect(next_path)
 
     if request.method == 'POST':
+        # try:
+        #     org = current_org._get_current_object()
+        #     user = models.User.get_by_email_and_org(request.form['email'], org)
+        #     if user and not user.is_disabled and user.verify_password(request.form['password']):
+        #         remember = ('remember' in request.form)
+        #         login_user(user, remember=remember)
+        #         return redirect(next_path)
+        #     else:
+        #         flash("Wrong email or password.")
+        # except NoResultFound:
+        #     flash("Wrong email or password.")
         try:
             org = current_org._get_current_object()
-            user = models.User.get_by_email_and_org(request.form['email'], org)
-            if user and not user.is_disabled and user.verify_password(request.form['password']):
+            glodon_account = request.form['email']
+            #将email字段作为域帐号字段，用户用不带@glodon的域帐号进行认证，拼接@glodon.com生成邮箱
+            user = models.User.get_by_email_and_org(glodon_account+"@glodon.com", org)
+            password=request.form['password']
+            if user and not user.is_disabled and user.verify_password_glodon(glodon_account,password):
                 remember = ('remember' in request.form)
                 login_user(user, remember=remember)
                 return redirect(next_path)
             else:
                 flash("Wrong email or password.")
         except NoResultFound:
-            flash("Wrong email or password.")
+            flash("Wrong email or password")
 
     google_auth_url = get_google_auth_url(next_path)
 
