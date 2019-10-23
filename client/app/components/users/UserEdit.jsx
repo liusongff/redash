@@ -276,12 +276,7 @@ export default class UserEdit extends React.Component {
           <Fragment>
             {this.renderApiKey()}
             <hr />
-            <h5>Password</h5>
-            {user.id === currentUser.id && (
-              <Button className="w-100 m-t-10" onClick={this.changePassword} data-test="ChangePassword">
-                Change Password
-              </Button>
-            )}
+
             {(currentUser.isAdmin && user.id !== currentUser.id) && (
               <Fragment>
                 {user.isInvitationPending ?
